@@ -3,6 +3,5 @@ export enum PayUPaymentStatus{
     FAILURE,
     PENDING,
     ERROR,
-    UNKNOWN,
-    TIMEOUT
+    UNKNOWN
 }
