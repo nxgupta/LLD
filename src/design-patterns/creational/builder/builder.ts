@@ -15,7 +15,7 @@ class Product {
     private constructor() { }
 
     public static builder(): INameStep {
-        return new ProductBuilder((name:string, price: number)=>Product.create(name, price));
+        return new ProductBuilder((name: string, price: number) => Product.create(name, price));
     }
 
 
@@ -39,7 +39,7 @@ class ProductBuilder implements INameStep, IPriceStep, IBuildStep {
     private name?: string;
     private price?: number;
 
-    constructor(private factory:(name:string, price: number)=>Product) { };
+    constructor(private factory: (name: string, price: number) => Product) { };
 
     public setName(name: string): IPriceStep {
         this.name = name;
@@ -51,7 +51,7 @@ class ProductBuilder implements INameStep, IPriceStep, IBuildStep {
     }
 
     public build(): Product {
-        if(this.name ===undefined || this.price === undefined || this.price<=0) throw new Error('Invalid details')
+        if (this.name === undefined || this.price === undefined || this.price <= 0) throw new Error('Invalid details')
         return this.factory(this.name!, this.price!);
     }
 }
