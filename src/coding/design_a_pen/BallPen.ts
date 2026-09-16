@@ -1,5 +1,5 @@
-import { PenType } from "./Enums/PenType.ts";
-import { Pen } from "./Pen.ts";
+import { PenType } from "./Enums/PenType";
+import { Pen } from "./Pen";
 
 
 export class BallPen extends Pen {

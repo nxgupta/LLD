@@ -1,5 +1,5 @@
-import type { WritingMechaninsm } from "./Interfaces/writingMechanism.ts";
-import type { Pen } from "./Pen.ts";
+import type { WritingMechaninsm } from "./Interfaces/writingMechanism";
+import type { Pen } from "./Pen";
 
 export class PenBuilder<P extends Pen> {
     private pen: P;

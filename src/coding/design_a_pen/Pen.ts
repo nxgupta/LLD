@@ -1,5 +1,5 @@
-import type { PenType } from "./Enums/PenType.ts"
-import type { WritingMechaninsm } from "./Interfaces/writingMechanism.ts";
+import type { PenType } from "./Enums/PenType"
+import type { WritingMechaninsm } from "./Interfaces/writingMechanism";
 
 export abstract class Pen {
     public brand: string = "";

@@ -1,5 +1,5 @@
-import type { WritingMechaninsm } from "./Interfaces/writingMechanism.ts";
-import type { Tip } from "./Tip.ts";
+import type { WritingMechaninsm } from "./Interfaces/writingMechanism";
+import type { Tip } from "./Tip";
 
 export class InternalReservoir implements WritingMechaninsm {
     constructor(

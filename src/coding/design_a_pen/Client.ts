@@ -1,4 +1,4 @@
-import { PenFactory } from "./Factory.ts";
+import { PenFactory } from "./Factory";
 
 let ballPen = PenFactory.createBallPen()
 console.log(ballPen.write()); // Expect "Cannot write: Pen is retracted/capped."

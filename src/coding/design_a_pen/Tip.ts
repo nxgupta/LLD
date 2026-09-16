@@ -1,4 +1,4 @@
-import type { NibType } from "./Enums/NibType.ts";
+import type { NibType } from "./Enums/NibType";
 export class Tip {
     constructor(
         public readonly type: NibType,

@@ -1,11 +1,11 @@
-import { BallPen } from "./BallPen.ts";
-import { PenBuilder } from "./Builder.ts";
-import { NibType } from "./Enums/NibType.ts";
-import { FountainPen } from "./FountainPen.ts";
-import { InternalReservoir } from "./InternalReservoir.ts";
-import { Marker } from "./Marker.ts";
-import { Refill } from "./Refill.ts";
-import { Tip } from "./Tip.ts";
+import { BallPen } from "./BallPen";
+import { PenBuilder } from "./Builder";
+import { NibType } from "./Enums/NibType";
+import { FountainPen } from "./FountainPen";
+import { InternalReservoir } from "./InternalReservoir";
+import { Marker } from "./Marker";
+import { Refill } from "./Refill";
+import { Tip } from "./Tip";
 
 export class PenFactory {
     public static createBallPen(): BallPen {

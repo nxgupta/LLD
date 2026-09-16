@@ -1,4 +1,4 @@
-import { pathCalculatorStrategyRegistery, TransportMode } from "./registery.ts";
+import { pathCalculatorStrategyRegistery, TransportMode } from "./registery";
 
 class GoogleMaps {
     private factory = pathCalculatorStrategyRegistery;

@@ -1,4 +1,4 @@
-import type { Tip } from "../Tip.ts";
+import type { Tip } from "../Tip";
 
 export interface WritingMechaninsm {
     inkLevel: number;
