@@ -20,6 +20,7 @@ export class ParkingLotController {
         let response = new CreateParkingLotResponseDto();
         response.setParkingLot(parkingLotResponse);
         response.setResponseStatus(ResponseStatusDto.SUCCESS)
+        console.log(response)
         return response;
     }
 }

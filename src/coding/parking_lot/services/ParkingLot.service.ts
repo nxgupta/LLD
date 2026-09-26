@@ -1,4 +1,3 @@
-import { CreateParkingLotResponseDto } from "../dto/CreateParkingLotResponse.dto.js";
 import { ParkingLot } from "../models/ParkingLot.js";
 import { ParkingLotrRepository } from "../repositories/ParkingLot.repository.js";
 

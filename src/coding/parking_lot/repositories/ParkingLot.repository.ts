@@ -2,13 +2,12 @@ import { randomUUID } from "node:crypto";
 import type { ParkingLot } from "../models/ParkingLot.js";
 
 export class ParkingLotrRepository {
-    private parkingLots: Map<string, ParkingLot>;
-    private parkingLotId = randomUUID();
+    private parkingLots: Map<string, ParkingLot> = new Map();
 
     public save(parkingLot: ParkingLot): ParkingLot {
-        this.parkingLots.set(this.parkingLotId, parkingLot);
+        const parkingLotId = randomUUID()
+        parkingLot.setId(parkingLotId);
+        this.parkingLots.set(parkingLotId, parkingLot);
         return parkingLot;
     }
-
-
 }

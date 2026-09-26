@@ -3,7 +3,7 @@ import type { ResponseStatusDto } from "./ResponseStatus.dto.enum.js";
 
 export class CreateParkingLotResponseDto {
     private parkingLot: ParkingLot;
-    private responseStatus: number;
+    private responseStatus: string;
 
     public getParkingLot() {
         return this.parkingLot;
@@ -13,7 +13,7 @@ export class CreateParkingLotResponseDto {
         this.parkingLot = parkingLot;
     }
 
-    public getResponseStatus(): ResponseStatusDto {
+    public getResponseStatus(): string {
         return this.responseStatus;
     }
 

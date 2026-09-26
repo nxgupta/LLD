@@ -1,4 +1,4 @@
 export enum ResponseStatusDto {
-    SUCCESS,
-    FAILURE,
+    SUCCESS = 'SUCCESS',
+    FAILURE = 'FAILURE',
 }
