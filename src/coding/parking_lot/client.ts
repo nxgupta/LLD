@@ -5,7 +5,7 @@ import { ParkingLotrRepository } from "./repositories/ParkingLot.repository.js";
 import { ParkingLotService } from "./services/ParkingLot.service.js";
 import { UpadteParkingLotRequestDto } from "./dto/UpadteParkingLotRequest.dto.js";
 import { TicketRepository } from "./repositories/Ticket.repository.js";
-import { RandomSpotAssignmentStrategy } from "./strategies/SpotAssignmentStrategy/RandomSpotAssignmentStrategy.js";
+import { FirstAvailableSpotAssignmentStrategy } from "./strategies/SpotAssignmentStrategy/FirstAvailableSpotAssignmentStrategy.js";
 import { TicketService } from "./services/Ticket.service.js";
 import { TicketController } from "./controllers/Ticket.controller.js";
 import { GenerateTicketRequestDto } from "./dto/GenerateTicketRequest.dto.js";
@@ -18,7 +18,7 @@ ObjectRegistry.register("ParkingLotRepository", new ParkingLotrRepository());
 ObjectRegistry.register("ParkingLotService", new ParkingLotService(ObjectRegistry.get<ParkingLotrRepository>("ParkingLotRepository")));
 ObjectRegistry.register("ParkingLotController", new ParkingLotController(ObjectRegistry.get<ParkingLotService>("ParkingLotService")));
 ObjectRegistry.register("TicketRepository", new TicketRepository());
-ObjectRegistry.register("SpotAssignmentStrategy", new RandomSpotAssignmentStrategy());
+ObjectRegistry.register("SpotAssignmentStrategy", new FirstAvailableSpotAssignmentStrategy());
 ObjectRegistry.register("TicketService", new TicketService(ObjectRegistry.get("TicketRepository"), ObjectRegistry.get("SpotAssignmentStrategy"), ObjectRegistry.get("ParkingLotRepository")));
 ObjectRegistry.register("TicketController", new TicketController(ObjectRegistry.get("TicketService")));
 class Client {
