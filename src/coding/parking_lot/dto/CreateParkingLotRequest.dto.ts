@@ -1,7 +1,7 @@
 export class CreateParkingLotRequestDto {
     private address: string;
     private noOfFloors: number;
-
+    private noOfSpots: number;
     getAddress(): string {
         return this.address;
     }
@@ -16,5 +16,13 @@ export class CreateParkingLotRequestDto {
 
     setNoOfFloors(value: number) {
         this.noOfFloors = value;
+    }
+
+    getNoOfSpots(): number {
+        return this.noOfSpots;
+    }
+
+    setNoOfSpots(value: number) {
+        this.noOfSpots = value;
     }
 }

@@ -1,6 +1,5 @@
 import { ParkingLotController } from "./controllers/ParkingLot.controller.js";
 import { CreateParkingLotRequestDto } from "./dto/CreateParkingLotRequest.dto.js";
-import { ParkingLot } from "./models/ParkingLot.js";
 import { ObjectRegistry } from "./ObjectRegistry.js";
 import { ParkingLotrRepository } from "./repositories/ParkingLot.repository.js";
 import { ParkingLotService } from "./services/ParkingLot.service.js";
@@ -15,12 +14,20 @@ import { VehicleType } from "./models/enums/VehicleType.enum.js";
 import { EntryGate } from "./models/EntryGate.js";
 import { SpotType } from "./models/enums/SpotType.enum.js";
 
+ObjectRegistry.register("ParkingLotRepository", new ParkingLotrRepository());
+ObjectRegistry.register("ParkingLotService", new ParkingLotService(ObjectRegistry.get<ParkingLotrRepository>("ParkingLotRepository")));
+ObjectRegistry.register("ParkingLotController", new ParkingLotController(ObjectRegistry.get<ParkingLotService>("ParkingLotService")));
+ObjectRegistry.register("TicketRepository", new TicketRepository());
+ObjectRegistry.register("SpotAssignmentStrategy", new RandomSpotAssignmentStrategy());
+ObjectRegistry.register("TicketService", new TicketService(ObjectRegistry.get("TicketRepository"), ObjectRegistry.get("SpotAssignmentStrategy"), ObjectRegistry.get("ParkingLotRepository")));
+ObjectRegistry.register("TicketController", new TicketController(ObjectRegistry.get("TicketService")));
 class Client {
     createParkingLot() {
         const request = new CreateParkingLotRequestDto();
         const parkingLotController = ObjectRegistry.get<ParkingLotController>("ParkingLotController");
         request.setAddress('Hyderbad');
         request.setNoOfFloors(8);
+        request.setNoOfSpots(25);
         const response = parkingLotController.createParkingLot(request);
         console.log(response.getParkingLot())
     }
@@ -52,14 +59,6 @@ class Client {
     }
 }
 
-ObjectRegistry.register("ParkingLot", new ParkingLot());
-ObjectRegistry.register("ParkingLotRepository", new ParkingLotrRepository());
-ObjectRegistry.register("ParkingLotService", new ParkingLotService(ObjectRegistry.get<ParkingLotrRepository>("ParkingLotRepository")));
-ObjectRegistry.register("ParkingLotController", new ParkingLotController(ObjectRegistry.get<ParkingLotService>("ParkingLotService"), ObjectRegistry.get<ParkingLot>("ParkingLot")));
-ObjectRegistry.register("TicketRepository", new TicketRepository());
-ObjectRegistry.register("SpotAssignmentStrategy", new RandomSpotAssignmentStrategy());
-ObjectRegistry.register("TicketService", new TicketService(ObjectRegistry.get("TicketRepository"), ObjectRegistry.get("SpotAssignmentStrategy"), ObjectRegistry.get("ParkingLotRepository")));
-ObjectRegistry.register("TicketController", new TicketController(ObjectRegistry.get("TicketService")));
 
 let client = new Client();
 client.createParkingLot();

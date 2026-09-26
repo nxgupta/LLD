@@ -4,9 +4,9 @@ import type { EntryGate } from "./EntryGate.js";
 import type { ParkingLotFloor } from "./ParkingLotFloor.js";
 
 export class ParkingLot extends BaseModel {
-    private floors: ParkingLotFloor[];
-    private entryGates: EntryGate[];
-    private exitGates: EntryGate[];
+    private floors: ParkingLotFloor[] = [];
+    private entryGates: EntryGate[] = [];
+    private exitGates: EntryGate[] = [];
     private displayBoard: DisplayBoard
     private address: string;
     private noOfFloors: number;

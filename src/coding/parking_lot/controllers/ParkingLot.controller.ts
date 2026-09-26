@@ -8,17 +8,11 @@ import { ParkingLotFloor } from "../models/ParkingLotFloor.js";
 import { ParkingLotService } from "../services/ParkingLot.service.js";
 
 export class ParkingLotController {
-    constructor(private parkingLotService: ParkingLotService, private parkingLot: ParkingLot) {
-        this.parkingLotService = parkingLotService
+    constructor(private parkingLotService: ParkingLotService) {
+
     }
     createParkingLot(request: CreateParkingLotRequestDto): CreateParkingLotResponseDto {
-        this.parkingLot.setAddress(request.getAddress())
-        const ParkingLotFloors = [];
-        for (let i = 0; i < request.getNoOfFloors(); i++) {
-            ParkingLotFloors.push(new ParkingLotFloor());
-        }
-        this.parkingLot.setFloors(ParkingLotFloors)
-        let parkingLotResponse = this.parkingLotService.createParkingLot(this.parkingLot);
+        let parkingLotResponse = this.parkingLotService.createParkingLot(request.getAddress(), request.getNoOfFloors(), request.getNoOfSpots());
         let response = new CreateParkingLotResponseDto();
         response.setParkingLot(parkingLotResponse);
         response.setResponseStatus(ResponseStatusDto.SUCCESS)
@@ -32,4 +26,6 @@ export class ParkingLotController {
         response.setResponseStatus(ResponseStatusDto.SUCCESS)
         return response;
     }
+
+
 }

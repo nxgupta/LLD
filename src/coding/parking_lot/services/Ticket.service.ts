@@ -10,7 +10,8 @@ export class TicketService {
     constructor(private ticketRepository: TicketRepository, private spotAssignmentStrategy: SpotAssignmentStrategy, private parkingLotRepository: ParkingLotrRepository) {
 
     }
-    public generateTicket(vehicle: Vehicle, spotType: SpotType, entryGate: EntryGate, parkingLotId: number) {
+    public generateTicket(vehicle: Vehicle, spotType: SpotType, entryGate: EntryGate, parkingLotId: number): Ticket | null {
+        console.log(vehicle, spotType, entryGate, parkingLotId)
         const parkingLot = this.parkingLotRepository.getById(parkingLotId);
         const parkingSpot = this.spotAssignmentStrategy.assignSpot(parkingLot, spotType, entryGate)
         if (!parkingSpot) return null;
