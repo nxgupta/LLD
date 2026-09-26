@@ -8,4 +8,9 @@ export class ParkingLotService {
     createParkingLot(parkingLot: ParkingLot): ParkingLot {
         return this.parkingLotrRepository.save(parkingLot);
     }
+    updateParkingLotAddress(id: number, address: string): ParkingLot {
+        const parkingLot = this.parkingLotrRepository.getById(id)
+        parkingLot.setAddress(address);
+        return this.parkingLotrRepository.update(id, parkingLot);
+    }
 } 

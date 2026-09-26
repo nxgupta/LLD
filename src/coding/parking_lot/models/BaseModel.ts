@@ -1,11 +1,11 @@
 export abstract class BaseModel {
-    private id: string;
+    private id: number;
 
     public getId() {
         return this.id;
     }
 
-    public setId(id: string) {
+    public setId(id: number) {
         this.id = id
     }
 }

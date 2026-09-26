@@ -1,14 +1,14 @@
 import type { ParkingLot } from "../models/ParkingLot.js";
 import { ResponseDto } from "./ResponseDto.dto.js";
 
-export class CreateParkingLotResponseDto extends ResponseDto {
+export class UpadteParkingLotResponseDto extends ResponseDto {
     private parkingLot: ParkingLot;
 
-    public getParkingLot() {
+    getParkingLot(): ParkingLot {
         return this.parkingLot;
     }
 
-    public setParkingLot(parkingLot: ParkingLot) {
+    setParkingLot(parkingLot: ParkingLot): void {
         this.parkingLot = parkingLot;
     }
 }
