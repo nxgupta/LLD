@@ -21,7 +21,7 @@ export class TicketService {
         const ticket = new Ticket();
         ticket.setEntryGate(entryGate);
         ticket.setVehicle(vehicle);
-        ticket.setEntryTime(new Date().toDateString())
+        ticket.setEntryTime(new Date().toISOString())
         ticket.setGeneratedBy(entryGate.getOperator())
         ticket.setParkingLot(parkingLot);
         ticket.setParkingSpot(parkingSpot)
