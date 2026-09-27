@@ -8,7 +8,7 @@ class TimeAndVehicleTypeFeeCalculationStrategy implements FeeCalculationStrategy
         const entryTime = ticket.getEntryTime()
         const exitTime = new Date().toString()
         const duration = Math.ceil((Date.parse(exitTime) - Date.parse(entryTime)) / 1000 * 60);
-        const totalCharge = duration * FeeTableHelper.getHourlyRate(type) * FeeTableHelper.getBaseRate(type)
+        const totalCharge = duration * FeeTableHelper.getHourlyRate(type) + FeeTableHelper.getBaseRate(type)
         return totalCharge
     }
 }
