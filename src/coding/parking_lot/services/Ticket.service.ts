@@ -1,4 +1,5 @@
 import type { EntryGate } from "../models/EntryGate.js";
+import { SpotStatus } from "../models/enums/SpotStatus.enum.js";
 import type { SpotType } from "../models/enums/SpotType.enum.js";
 import { Ticket } from "../models/Ticket.js";
 import type { Vehicle } from "../models/Vehicle.js";
@@ -11,10 +12,11 @@ export class TicketService {
 
     }
     public generateTicket(vehicle: Vehicle, spotType: SpotType, entryGate: EntryGate, parkingLotId: number): Ticket | null {
-        console.log(vehicle, spotType, entryGate, parkingLotId)
         const parkingLot = this.parkingLotRepository.getById(parkingLotId);
         const parkingSpot = this.spotAssignmentStrategy.assignSpot(parkingLot, spotType, entryGate)
         if (!parkingSpot) return null;
+
+        parkingSpot.setStatus(SpotStatus.BOOKED)
 
         const ticket = new Ticket();
         ticket.setEntryGate(entryGate);
@@ -22,8 +24,8 @@ export class TicketService {
         ticket.setEntryTime(new Date().toDateString())
         ticket.setGeneratedBy(entryGate.getOperator())
         ticket.setParkingLot(parkingLot);
+        ticket.setParkingSpot(parkingSpot)
 
-
-        return ticket;
+        return this.ticketRepository.save(ticket);
     }
 }

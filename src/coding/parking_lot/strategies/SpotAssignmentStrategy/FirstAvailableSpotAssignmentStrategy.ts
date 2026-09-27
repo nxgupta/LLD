@@ -7,7 +7,6 @@ import type { SpotAssignmentStrategy } from "./SpotAssignment.strategy.js";
 
 export class FirstAvailableSpotAssignmentStrategy implements SpotAssignmentStrategy {
     assignSpot(parkingLot: ParkingLot, spotType: SpotType, entryGate: EntryGate): ParkingSpot | null {
-        console.log(parkingLot.getFloors(), (parkingLot.getFloors()[0])?.getSpots())
         for (const floor of parkingLot.getFloors()) {
             for (const spot of floor.getSpots()) {
                 if (spot.getStatus() === SpotStatus.AVIALABLE && spot.getSpotType() === spotType) {
