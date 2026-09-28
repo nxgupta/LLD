@@ -1,22 +1,42 @@
-import type { SeatType } from "./enums/SeatType.enum.js";
+import { Column, Entity, ManyToOne } from "typeorm";
+import { SeatType } from "./enums/SeatType.enum.js";
+import { BaseModel } from "./BaseModel.js";
+import { Auditorium } from "./Auditorium.js";
 
+@Entity()
 export class Seat extends BaseModel {
-    private seatNumber: string;
-    private seatType: SeatType;
+    @Column()
+    private _seatNumber: string;
 
-    getSeatNumber(): string {
-        return this.seatNumber;
+    @Column({
+        type: "enum",
+        enum: SeatType,
+        default: SeatType.SILVER
+    })
+    private _seatType: SeatType;
+
+    @ManyToOne(() => Auditorium, (auditorium) => auditorium.seats, { onDelete: "CASCADE" })
+    private _auditorium: Auditorium;
+
+    public get seatNumber(): string {
+        return this._seatNumber;
+    }
+    public set seatNumber(val: string) {
+        this._seatNumber = val;
     }
 
-    setSeatNumber(seatNumber: string): void {
-        this.seatNumber = seatNumber;
+    public get seatType(): SeatType {
+        return this._seatType;
+    }
+    public set seatType(val: SeatType) {
+        this._seatType = val;
     }
 
-    getSeatType(): SeatType {
-        return this.seatType;
+    // This public getter satisfies (seat: Seat) => seat.auditorium without 'any'
+    public get auditorium(): Auditorium {
+        return this._auditorium;
     }
-
-    setSeatType(seatType: SeatType): void {
-        this.seatType = seatType;
+    public set auditorium(val: Auditorium) {
+        this._auditorium = val;
     }
 }

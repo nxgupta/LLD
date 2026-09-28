@@ -1,22 +1,26 @@
-import type { Theatre } from "./Theatre.js";
+import { Column, Entity, JoinTable, OneToMany } from "typeorm";
+import { BaseModel } from "./BaseModel.js";
+import { Theatre } from "./Theatre.js";
 
+@Entity()
 export class City extends BaseModel {
-    private name: string;
-    private theatres: Theatre[];
+    @Column({ name: "name", type: "varchar", length: 120 })
+    private _name: string;
 
-    public getName(): string {
-        return this.name;
+    @OneToMany(() => Theatre, (theatre) => theatre.city)
+    private _theatres: Theatre[];
+
+    public get name(): string {
+        return this._name;
+    }
+    public set name(value: string) {
+        this._name = value;
     }
 
-    public setName(name: string): void {
-        this.name = name;
+    public get theatres(): Theatre[] {
+        return this._theatres;
     }
-
-    public getTheatres(): Theatre[] {
-        return this.theatres;
-    }
-
-    public setTheatres(theatres: Theatre[]): void {
-        this.theatres = theatres;
+    public set theatres(value: Theatre[]) {
+        this._theatres = value;
     }
 }

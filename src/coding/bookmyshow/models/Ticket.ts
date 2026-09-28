@@ -1,73 +1,93 @@
-import type { Auditorium } from "./Auditorium.js";
-import type { TicketStatus } from "./enums/TicketStatus.enum.js";
-import type { Show } from "./Show.js";
-import type { ShowSeat } from "./ShowSeat.js";
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany } from "typeorm";
+import { Auditorium } from "./Auditorium.js";
+import { TicketStatus } from "./enums/TicketStatus.enum.js";
+import { Show } from "./Show.js";
+import { ShowSeat } from "./ShowSeat.js";
+import { BaseModel } from "./BaseModel.js";
+import { Payment } from "./Payment.js";
 
+@Entity()
 export class Ticket extends BaseModel {
-    private show: Show;
-    private showSeats: ShowSeat[];
-    private auditorium: Auditorium;
-    private bookedBy: User;
-    private totalAmount: number;
-    private ticketStatus: TicketStatus;
-    private timeOfBooking: Date;
+    @ManyToOne(() => Show)
+    private _show: Show;
+    @ManyToMany(() => ShowSeat)
+    private _showSeats: ShowSeat[];
+    @ManyToOne(() => Auditorium)
+    private _auditorium: Auditorium;
+    @ManyToOne(() => User)
+    private _bookedBy: User;
+    @Column({ name: "total_amount", type: "decimal", precision: 10, scale: 2 })
+    private _totalAmount: number;
+    @Column({
+        name: "ticket_status",
+        type: "enum",
+        enum: TicketStatus,
+        default: TicketStatus.PENDING,
+    })
+    private _ticketStatus: TicketStatus;
+
+    @Column({ name: "time_of_booking", type: "timestamp with time zone" })
+    private _timeOfBooking: Date;
+
+    @OneToMany(() => Payment, (payment) => payment.ticket)
+    private _payments: Payment[];
 
     // Getters and setters for the private properties of the Ticket class.
 
-    getShow(): Show {
-        return this.show;
+    public get show(): Show {
+        return this._show;
+    }
+    public set show(value: Show) {
+        this._show = value;
     }
 
-    setShow(show: Show): void {
-        this.show = show;
+    public get showSeats(): ShowSeat[] {
+        return this._showSeats;
+    }
+    public set showSeats(value: ShowSeat[]) {
+        this._showSeats = value;
     }
 
-    getShowSeats(): ShowSeat[] {
-        return this.showSeats;
+    public get auditorium(): Auditorium {
+        return this._auditorium;
+    }
+    public set auditorium(value: Auditorium) {
+        this._auditorium = value;
     }
 
-    setShowSeats(showSeats: ShowSeat[]): void {
-        this.showSeats = showSeats;
+    public get bookedBy(): User {
+        return this._bookedBy;
+    }
+    public set bookedBy(value: User) {
+        this._bookedBy = value;
     }
 
-    getAuditorium(): Auditorium {
-        return this.auditorium;
+    public get totalAmount(): number {
+        return this._totalAmount;
+    }
+    public set totalAmount(value: number) {
+        this._totalAmount = value;
     }
 
-    setAuditorium(auditorium: Auditorium): void {
-        this.auditorium = auditorium;
+    public get ticketStatus(): TicketStatus {
+        return this._ticketStatus;
+    }
+    public set ticketStatus(value: TicketStatus) {
+        this._ticketStatus = value;
     }
 
-    getBookedBy(): User {
-        return this.bookedBy;
+    public get timeOfBooking(): Date {
+        return this._timeOfBooking;
+    }
+    public set timeOfBooking(value: Date) {
+        this._timeOfBooking = value;
     }
 
-    setBookedBy(bookedBy: User): void {
-        this.bookedBy = bookedBy;
+    public get payments(): Payment[] {
+        return this._payments;
     }
-
-    getTotalAmount(): number {
-        return this.totalAmount;
-    }
-
-    setTotalAmount(totalAmount: number): void {
-        this.totalAmount = totalAmount;
-    }
-
-    getTicketStatus(): TicketStatus {
-        return this.ticketStatus;
-    }
-
-    setTicketStatus(ticketStatus: TicketStatus): void {
-        this.ticketStatus = ticketStatus;
-    }
-
-    getTimeOfBooking(): Date {
-        return this.timeOfBooking;
-    }
-
-    setTimeOfBooking(timeOfBooking: Date): void {
-        this.timeOfBooking = timeOfBooking;
+    public set payments(value: Payment[]) {
+        this._payments = value;
     }
 
 }

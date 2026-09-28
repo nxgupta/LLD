@@ -1,82 +1,115 @@
-import type { Auditorium } from "./Auditorium.js";
-import type { Language } from "./enums/Language.enum.js";
-import type { ShowFeature } from "./enums/ShowFeature.enum.js";
-import type { Movie } from "./Movie.js";
-import type { ShowSeat } from "./ShowSeat.js";
-import type { ShowSeatType } from "./ShowSeatType.js";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
+import { Auditorium } from "./Auditorium.js";
+import { Language } from "./enums/Language.enum.js";
+import { ShowFeature } from "./enums/ShowFeature.enum.js";
+import { Movie } from "./Movie.js";
+import { ShowSeat } from "./ShowSeat.js";
+import { ShowSeatType } from "./ShowSeatType.js";
+import { BaseModel } from "./BaseModel.js";
+import { Theatre } from "./Theatre.js";
 
+@Entity()
 export class Show extends BaseModel {
-    private movie: Movie;
-    private startTime: Date;
-    private endTime: Date;
-    private auditorium: Auditorium;
-    private showSeats: ShowSeat[];
-    private showSeatTypes: ShowSeatType[];
-    private language: Language;
-    private showFeatures: ShowFeature[];
+    @ManyToOne(() => Movie, (movie) => movie.shows)
+    private _movie: Movie;
 
-    getMovie(): Movie {
-        return this.movie;
+    @Column({ name: "start_time", type: "timestamp with time zone" })
+    private _startTime: Date;
+
+    @Column({ name: "end_time", type: "timestamp with time zone" })
+    private _endTime: Date;
+
+    @ManyToOne(() => Auditorium, (auditorium) => auditorium.shows, { nullable: false })
+    private _auditorium: Auditorium;
+
+    @ManyToOne(() => Theatre, (theatre) => theatre.upcomingShows, { nullable: true })
+    private _theatre: Theatre;
+
+
+    @OneToMany(() => ShowSeat, (showSeat) => showSeat.show, { cascade: true })
+    private _showSeats: ShowSeat[];
+
+    @OneToMany(() => ShowSeatType, (showSeatType) => showSeatType.show, { cascade: true })
+    private _showSeatTypes: ShowSeatType[];
+
+    @Column({
+        name: "language",
+        type: "enum",
+        enum: Language,
+        default: Language.ENGLISH,
+    })
+    private _language: Language;
+
+    @Column({
+        name: "show_features",
+        type: "enum",
+        enum: ShowFeature,
+        array: true,
+        default: [],
+    })
+    private _showFeatures: ShowFeature[];
+
+    public get movie(): Movie {
+        return this._movie;
+    }
+    public set movie(value: Movie) {
+        this._movie = value;
     }
 
-    setMovie(movie: Movie): void {
-        this.movie = movie;
+    public get auditorium(): Auditorium {
+        return this._auditorium;
+    }
+    public set auditorium(value: Auditorium) {
+        this._auditorium = value;
     }
 
-    getStartTime(): Date {
-        return this.startTime;
+    public get theatre(): Theatre {
+        return this._theatre;
+    }
+    public set theatre(value: Theatre) {
+        this._theatre = value;
     }
 
-    setStartTime(startTime: Date): void {
-        this.startTime = startTime;
+    public get startTime(): Date {
+        return this._startTime;
+    }
+    public set startTime(value: Date) {
+        this._startTime = value;
     }
 
-    getEndTime(): Date {
-        return this.endTime;
+    public get endTime(): Date {
+        return this._endTime;
+    }
+    public set endTime(value: Date) {
+        this._endTime = value;
     }
 
-    setEndTime(endTime: Date): void {
-        this.endTime = endTime;
+    public get language(): Language {
+        return this._language;
+    }
+    public set language(value: Language) {
+        this._language = value;
     }
 
-    getAuditorium(): Auditorium {
-        return this.auditorium;
+    public get showFeatures(): ShowFeature[] {
+        return this._showFeatures;
+    }
+    public set showFeatures(value: ShowFeature[]) {
+        this._showFeatures = value;
     }
 
-    setAuditorium(auditorium: Auditorium): void {
-        this.auditorium = auditorium;
+    public get showSeats(): ShowSeat[] {
+        return this._showSeats;
+    }
+    public set showSeats(value: ShowSeat[]) {
+        this._showSeats = value;
     }
 
-    getShowSeats(): ShowSeat[] {
-        return this.showSeats;
+    public get showSeatTypes(): ShowSeatType[] {
+        return this._showSeatTypes;
     }
-
-    setShowSeats(showSeats: ShowSeat[]): void {
-        this.showSeats = showSeats;
-    }
-
-    getShowSeatTypes(): ShowSeatType[] {
-        return this.showSeatTypes;
-    }
-
-    setShowSeatTypes(showSeatTypes: ShowSeatType[]): void {
-        this.showSeatTypes = showSeatTypes;
-    }
-
-    getLanguage(): Language {
-        return this.language;
-    }
-
-    setLanguage(language: Language): void {
-        this.language = language;
-    }
-
-    getShowFeatures(): ShowFeature[] {
-        return this.showFeatures;
-    }
-
-    setShowFeatures(showFeatures: ShowFeature[]): void {
-        this.showFeatures = showFeatures;
+    public set showSeatTypes(value: ShowSeatType[]) {
+        this._showSeatTypes = value;
     }
 
 }

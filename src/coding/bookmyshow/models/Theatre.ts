@@ -1,42 +1,59 @@
-import type { Auditorium } from "./Auditorium.js";
-import type { Show } from "./Show.js";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { Auditorium } from "./Auditorium.js";
+import { Show } from "./Show.js";
+import { BaseModel } from "./BaseModel.js";
+import { City } from "./City.js";
 
+@Entity()
 export class Theatre extends BaseModel {
-    private name: string;
-    private address: string;
-    private auditoriums: Auditorium[];
+    @Column({ name: "name", type: "varchar", length: 150 })
+    private _name: string;
 
-    private upcomingShows: Show[];
+    @Column({ name: "address", type: "varchar", length: 300 })
+    private _address: string;
 
-    getName(): string {
-        return this.name;
+    @ManyToOne(() => City, (city) => city.theatres, { nullable: false })
+    @JoinColumn({ name: "city_id" })
+    private _city: City;
+
+    @OneToMany(() => Auditorium, (auditorium) => auditorium.theatre)
+    private _auditoriums: Auditorium[];
+
+    @OneToMany(() => Show, (show) => show.theatre)
+    private _upcomingShows: Show[];
+
+    public get name(): string {
+        return this._name;
+    }
+    public set name(value: string) {
+        this._name = value;
     }
 
-    setName(name: string): void {
-        this.name = name;
+    public get address(): string {
+        return this._address;
+    }
+    public set address(value: string) {
+        this._address = value;
     }
 
-    getAddress(): string {
-        return this.address;
+    public get city(): City {
+        return this._city;
+    }
+    public set city(value: City) {
+        this._city = value;
     }
 
-    setAddress(address: string): void {
-        this.address = address;
+    public get auditoriums(): Auditorium[] {
+        return this._auditoriums;
+    }
+    public set auditoriums(value: Auditorium[]) {
+        this._auditoriums = value;
     }
 
-    getAuditoriums(): Auditorium[] {
-        return this.auditoriums;
+    public get upcomingShows(): Show[] {
+        return this._upcomingShows;
     }
-
-    setAuditoriums(auditoriums: Auditorium[]): void {
-        this.auditoriums = auditoriums;
-    }
-
-    getUpcomingShows(): Show[] {
-        return this.upcomingShows;
-    }
-
-    setUpcomingShows(upcomingShows: Show[]): void {
-        this.upcomingShows = upcomingShows;
+    public set upcomingShows(value: Show[]) {
+        this._upcomingShows = value;
     }
 }

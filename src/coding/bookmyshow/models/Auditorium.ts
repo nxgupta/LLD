@@ -1,52 +1,70 @@
+import { Column, Entity, JoinTable, ManyToOne, OneToMany } from "typeorm";
+import { BaseModel } from "./BaseModel.js";
 import type { AuditoriumFeature } from "./enums/AuditoriumFeature.enum.js";
-import type { Seat } from "./Seat.js";
-import type { Theatre } from "./Theatre.js";
+import { Seat } from "./Seat.js";
+import { Theatre } from "./Theatre.js";
+import { Show } from "./Show.js";
 
+Entity()
 export class Auditorium extends BaseModel {
-    private name: string;
-    private seats: Seat[];
-    private capacity: number;
+    @Column()
+    private _name: string;
 
-    private auditoriumFeatures: AuditoriumFeature[];
-    private theatre: Theatre;
+    @OneToMany(() => Seat, (seat) => seat.auditorium)
+    private _seats: Seat[];
 
-    public getName(): string {
-        return this.name;
+    @Column({ type: "int", default: 0 })
+    private _capacity: number;
+
+    @Column({ type: "enum", enum: Auditorium, array: true })
+    private _auditoriumFeatures: AuditoriumFeature[];
+
+    @ManyToOne(() => Theatre, (theatre: Theatre) => theatre.auditoriums, { onDelete: "CASCADE" })
+    @JoinTable({ name: "theatre_id" })
+    private _theatre: Theatre;
+
+    @OneToMany(() => Show, (show) => show.auditorium)
+    private _shows: Show[];
+
+    public get name(): string {
+        return this._name;
+    }
+    public set name(val: string) {
+        this._name = val;
     }
 
-    public setName(name: string): string {
-        return this.name = name;
+    // This public getter satisfies (auditorium: Auditorium) => auditorium.seats without 'any'
+    public get seats(): Seat[] {
+        return this._seats;
+    }
+    public set seats(val: Seat[]) {
+        this._seats = val;
     }
 
-    public getSeats(): Seat[] {
-        return this.seats;
+    public get capacity(): number {
+        return this._capacity;
+    }
+    public set capacity(val: number) {
+        this._capacity = val;
     }
 
-    public setSeats(seats: Seat[]): Seat[] {
-        return this.seats = seats;
+    public get auditoriumFeatures(): AuditoriumFeature[] {
+        return this._auditoriumFeatures;
+    }
+    public set auditoriumFeatures(val: AuditoriumFeature[]) {
+        this._auditoriumFeatures = val;
     }
 
-    public getCapacity(): number {
-        return this.capacity;
+    public get theatre(): Theatre {
+        return this._theatre;
     }
-
-    public setCapacity(capacity: number): number {
-        return this.capacity = capacity;
+    public set theatre(val: Theatre) {
+        this._theatre = val;
     }
-
-    public getAuditoriumFeatures(): AuditoriumFeature[] {
-        return this.auditoriumFeatures;
+    public get shows(): Show[] {
+        return this._shows;
     }
-
-    public setAuditoriumFeatures(auditoriumFeatures: AuditoriumFeature[]): AuditoriumFeature[] {
-        return this.auditoriumFeatures = auditoriumFeatures;
-    }
-
-    public getTheatre(): Theatre {
-        return this.theatre;
-    }
-
-    public setTheatre(theatre: Theatre): Theatre {
-        return this.theatre = theatre;
+    public set shows(value: Show[]) {
+        this._shows = value;
     }
 }

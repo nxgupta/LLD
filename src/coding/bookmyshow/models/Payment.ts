@@ -1,62 +1,78 @@
-import type { PaymentMethod } from "./enums/PaymentMethod.enum.js";
-import type { PaymentStatus } from "./enums/PaymentStatus.enum.js";
-import type { Ticket } from "./Ticket.js";
+import { Column, Entity, ManyToOne } from "typeorm";
+import { PaymentMethod } from "./enums/PaymentMethod.enum.js";
+import { PaymentStatus } from "./enums/PaymentStatus.enum.js";
+import { Ticket } from "./Ticket.js";
+import { BaseModel } from "./BaseModel.js";
 
+@Entity()
 export class Payment extends BaseModel {
-    private paymentMethod: PaymentMethod;
-    private timeOfpayment: Date;
-    private amount: number;
-    private referencId: string;
-    private status: PaymentStatus;
-    private ticket: Ticket;
+
+    @Column({
+        name: "payment_method",
+        type: "enum",
+        enum: PaymentMethod,
+    })
+    private _paymentMethod: PaymentMethod;
+
+    @Column({ type: "timestamp with time zone" })
+    private _timeOfPayment: Date;
+
+    @Column({ type: "int" })
+    private _amount: number;
+
+    @Column({ type: "varchar", length: 120, unique: true })
+    private _referenceId: string;
+
+    @Column({
+        name: "status",
+        type: "enum",
+        enum: PaymentStatus,
+        default: PaymentStatus.PENDING,
+    })
+    private _status: PaymentStatus;
+    @ManyToOne(() => Ticket, (ticket) => ticket.payments)
+    private _ticket: Ticket;
 
     // Getters
-    get getPaymentMethod(): PaymentMethod {
-        return this.paymentMethod;
+    public get paymentMethod(): PaymentMethod {
+        return this._paymentMethod;
+    }
+    public set paymentMethod(value: PaymentMethod) {
+        this._paymentMethod = value;
     }
 
-    get getTimeOfPayment(): Date {
-        return this.timeOfpayment;
+    public get timeOfPayment(): Date {
+        return this._timeOfPayment;
+    }
+    public set timeOfPayment(value: Date) {
+        this._timeOfPayment = value;
     }
 
-    get getAmount(): number {
-        return this.amount;
+    public get amount(): number {
+        return this._amount;
+    }
+    public set amount(value: number) {
+        this._amount = value;
     }
 
-    get getReferencId(): string {
-        return this.referencId;
+    public get referenceId(): string {
+        return this._referenceId;
+    }
+    public set referenceId(value: string) {
+        this._referenceId = value;
     }
 
-    get getStatus(): PaymentStatus {
-        return this.status;
+    public get status(): PaymentStatus {
+        return this._status;
+    }
+    public set status(value: PaymentStatus) {
+        this._status = value;
     }
 
-    get getTicket(): Ticket {
-        return this.ticket;
+    public get ticket(): Ticket {
+        return this._ticket;
     }
-
-    // Setters
-    set setPaymentMethod(paymentMethod: PaymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    set setTimeOfPayment(timeOfpayment: Date) {
-        this.timeOfpayment = timeOfpayment;
-    }
-
-    set setAmount(amount: number) {
-        this.amount = amount;
-    }
-
-    set setReferencId(referencId: string) {
-        this.referencId = referencId;
-    }
-
-    set setStatus(status: PaymentStatus) {
-        this.status = status;
-    }
-
-    set setTicket(ticket: Ticket) {
-        this.ticket = ticket;
+    public set ticket(value: Ticket) {
+        this._ticket = value;
     }
 }
