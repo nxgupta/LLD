@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:16
+    container_name: bookmyshow-db
+    environment:
+      POSTGRES_USER: bookmyshow
+      POSTGRES_PASSWORD: bookmyshow
+      POSTGRES_DB: bookmyshow
+    ports:
+      - "5434:5432"
+    volumes:
+      - bookmyshow-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bookmyshow"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+volumes:
+  bookmyshow-db-data:
