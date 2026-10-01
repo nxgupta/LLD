@@ -1,4 +1,5 @@
 import { Column, Entity, ManyToOne } from "typeorm";
+import type { Relation } from "typeorm"
 import { SeatType } from "./enums/SeatType.enum.js";
 import { BaseModel } from "./BaseModel.js";
 import { Auditorium } from "./Auditorium.js";
@@ -16,7 +17,7 @@ export class Seat extends BaseModel {
     private _seatType: SeatType;
 
     @ManyToOne(() => Auditorium, (auditorium) => auditorium.seats, { onDelete: "CASCADE" })
-    private _auditorium: Auditorium;
+    private _auditorium: Relation<Auditorium>;
 
     public get seatNumber(): string {
         return this._seatNumber;

@@ -1,4 +1,5 @@
 import { Column, Entity, ManyToOne } from "typeorm";
+import type { Relation } from "typeorm"
 import { ShowSeatState } from "./enums/ShowSeatState.enum.js";
 import { Seat } from "./Seat.js";
 import { Show } from "./Show.js";
@@ -7,10 +8,10 @@ import { BaseModel } from "./BaseModel.js";
 @Entity()
 export class ShowSeat extends BaseModel {
     @ManyToOne(() => Show, { nullable: false, onDelete: "CASCADE" })
-    private _show: Show;
+    private _show: Relation<Show>;
 
     @ManyToOne(() => Seat, { nullable: false, onDelete: "CASCADE" })
-    private _seat: Seat;
+    private _seat: Relation<Seat>;
 
     @Column({
         name: "state",

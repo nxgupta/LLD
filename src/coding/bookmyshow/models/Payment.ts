@@ -1,4 +1,6 @@
 import { Column, Entity, ManyToOne } from "typeorm";
+import type { Relation } from "typeorm"
+
 import { PaymentMethod } from "./enums/PaymentMethod.enum.js";
 import { PaymentStatus } from "./enums/PaymentStatus.enum.js";
 import { Ticket } from "./Ticket.js";
@@ -31,7 +33,7 @@ export class Payment extends BaseModel {
     })
     private _status: PaymentStatus;
     @ManyToOne(() => Ticket, (ticket) => ticket.payments)
-    private _ticket: Ticket;
+    private _ticket: Relation<Ticket>;
 
     // Getters
     public get paymentMethod(): PaymentMethod {

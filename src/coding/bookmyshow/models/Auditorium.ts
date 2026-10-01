@@ -1,22 +1,22 @@
-import { Column, Entity, JoinTable, ManyToOne, OneToMany } from "typeorm";
+import { Column, Entity, JoinTable, ManyToOne, OneToMany, Relation } from "typeorm";
 import { BaseModel } from "./BaseModel.js";
-import type { AuditoriumFeature } from "./enums/AuditoriumFeature.enum.js";
+import { AuditoriumFeature } from "./enums/AuditoriumFeature.enum.js";
 import { Seat } from "./Seat.js";
 import { Theatre } from "./Theatre.js";
 import { Show } from "./Show.js";
 
-Entity()
+@Entity()
 export class Auditorium extends BaseModel {
     @Column()
     private _name: string;
 
     @OneToMany(() => Seat, (seat) => seat.auditorium)
-    private _seats: Seat[];
+    private _seats: Relation<Seat>[];
 
     @Column({ type: "int", default: 0 })
     private _capacity: number;
 
-    @Column({ type: "enum", enum: Auditorium, array: true })
+    @Column({ type: "enum", enum: AuditoriumFeature, array: true })
     private _auditoriumFeatures: AuditoriumFeature[];
 
     @ManyToOne(() => Theatre, (theatre: Theatre) => theatre.auditoriums, { onDelete: "CASCADE" })

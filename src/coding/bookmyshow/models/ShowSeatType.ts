@@ -1,4 +1,5 @@
 import { Column, Entity, ManyToOne } from "typeorm";
+import type { Relation } from "typeorm"
 import { SeatType } from "./enums/SeatType.enum.js";
 import { Show } from "./Show.js";
 import { BaseModel } from "./BaseModel.js";
@@ -6,7 +7,7 @@ import { BaseModel } from "./BaseModel.js";
 @Entity()
 export class ShowSeatType extends BaseModel {
     @ManyToOne(() => Show, (show) => show.showSeatTypes, { nullable: false, onDelete: "CASCADE" })
-    private _show: Show;
+    private _show: Relation<Show>;
     @Column({
         name: "seat_type",
         type: "enum",

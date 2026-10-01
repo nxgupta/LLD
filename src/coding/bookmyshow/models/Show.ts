@@ -1,4 +1,5 @@
 import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
+import type { Relation } from "typeorm"
 import { Auditorium } from "./Auditorium.js";
 import { Language } from "./enums/Language.enum.js";
 import { ShowFeature } from "./enums/ShowFeature.enum.js";
@@ -27,7 +28,7 @@ export class Show extends BaseModel {
 
 
     @OneToMany(() => ShowSeat, (showSeat) => showSeat.show, { cascade: true })
-    private _showSeats: ShowSeat[];
+    private _showSeats: Relation<ShowSeat>[];
 
     @OneToMany(() => ShowSeatType, (showSeatType) => showSeatType.show, { cascade: true })
     private _showSeatTypes: ShowSeatType[];

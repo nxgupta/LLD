@@ -5,6 +5,7 @@ import { Show } from "./Show.js";
 import { ShowSeat } from "./ShowSeat.js";
 import { BaseModel } from "./BaseModel.js";
 import { Payment } from "./Payment.js";
+import { User } from "./User.js";
 
 @Entity()
 export class Ticket extends BaseModel {
