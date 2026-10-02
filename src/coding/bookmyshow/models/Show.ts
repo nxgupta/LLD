@@ -21,10 +21,10 @@ export class Show extends BaseModel {
     private _endTime: Date;
 
     @ManyToOne(() => Auditorium, (auditorium) => auditorium.shows, { nullable: false })
-    private _auditorium: Auditorium;
+    private _auditorium: Relation<Auditorium>;
 
     @ManyToOne(() => Theatre, (theatre) => theatre.upcomingShows, { nullable: true })
-    private _theatre: Theatre;
+    private _theatre: Relation<Theatre>;
 
 
     @OneToMany(() => ShowSeat, (showSeat) => showSeat.show, { cascade: true })

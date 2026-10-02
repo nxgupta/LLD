@@ -16,13 +16,13 @@ export class Payment extends BaseModel {
     })
     private _paymentMethod: PaymentMethod;
 
-    @Column({ type: "timestamp with time zone" })
+    @Column({ name: "time_of_payment", type: "timestamp with time zone" })
     private _timeOfPayment: Date;
 
-    @Column({ type: "int" })
+    @Column({ name: "amount", type: "int" })
     private _amount: number;
 
-    @Column({ type: "varchar", length: 120, unique: true })
+    @Column({ name: "reference_id", type: "varchar", length: 120, unique: true })
     private _referenceId: string;
 
     @Column({

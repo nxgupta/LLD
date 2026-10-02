@@ -6,10 +6,11 @@ import { Auditorium } from "./Auditorium.js";
 
 @Entity()
 export class Seat extends BaseModel {
-    @Column()
+    @Column({ name: "seat_number" })
     private _seatNumber: string;
 
     @Column({
+        name: "seat_type",
         type: "enum",
         enum: SeatType,
         default: SeatType.SILVER

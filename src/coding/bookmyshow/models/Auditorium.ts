@@ -8,21 +8,21 @@ import { Show } from "./Show.js";
 
 @Entity()
 export class Auditorium extends BaseModel {
-    @Column()
+    @Column({ name: 'name' })
     private _name: string;
 
     @OneToMany(() => Seat, (seat) => seat.auditorium)
     private _seats: Relation<Seat>[];
 
-    @Column({ type: "int", default: 0 })
+    @Column({ name: "capacity", type: "int", default: 0 })
     private _capacity: number;
 
-    @Column({ type: "enum", enum: AuditoriumFeature, array: true })
+    @Column({ name: "auditorium_features", type: "enum", enum: AuditoriumFeature, array: true })
     private _auditoriumFeatures: AuditoriumFeature[];
 
     @ManyToOne(() => Theatre, (theatre: Theatre) => theatre.auditoriums, { onDelete: "CASCADE" })
     @JoinColumn({ name: "theatre_id" })
-    private _theatre: Theatre;
+    private _theatre: Relation<Theatre>;
 
     @OneToMany(() => Show, (show) => show.auditorium)
     private _shows: Show[];

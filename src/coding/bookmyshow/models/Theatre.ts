@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, type Relation } from "typeorm";
 import { Auditorium } from "./Auditorium.js";
 import { Show } from "./Show.js";
 import { BaseModel } from "./BaseModel.js";
@@ -14,7 +14,7 @@ export class Theatre extends BaseModel {
 
     @ManyToOne(() => City, (city) => city.theatres, { nullable: false })
     @JoinColumn({ name: "city_id" })
-    private _city: City;
+    private _city: Relation<City>;
 
     @OneToMany(() => Auditorium, (auditorium) => auditorium.theatre)
     private _auditoriums: Auditorium[];

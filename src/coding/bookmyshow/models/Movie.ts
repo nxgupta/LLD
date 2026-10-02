@@ -7,21 +7,21 @@ import { Show } from "./Show.js";
 
 @Entity()
 export class Movie extends BaseModel {
-    @Column()
+    @Column({ name: "name" })
     private _name: string;
 
-    @Column({ type: "enum", enum: Language, array: true, default: [] })
+    @Column({ name: "languages", type: "enum", enum: Language, array: true, default: [] })
     private _languages: Language[];
 
     @ManyToMany(() => Actor, (actor) => actor.movies)
     private _actors: Actor[];
 
-    @Column({ type: "int" })
+    @Column({ name: "length", type: "int" })
     private _length: number;
-    @Column({ type: "int" })
+    @Column({ name: "rating", type: "int" })
     private _rating: number;
 
-    @Column({ type: "enum", enum: MovieFeature, array: true, default: [] })
+    @Column({ name: "movie_features", type: "enum", enum: MovieFeature, array: true, default: [] })
     private _movieFeatures: MovieFeature[];
 
     @OneToMany(() => Show, (show) => show.movie)
