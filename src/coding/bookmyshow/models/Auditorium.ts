@@ -1,4 +1,5 @@
-import { Column, Entity, JoinTable, ManyToOne, OneToMany, Relation } from "typeorm";
+import { Column, Entity, JoinTable, ManyToOne, OneToMany } from "typeorm";
+import type { Relation } from "typeorm"
 import { BaseModel } from "./BaseModel.js";
 import { AuditoriumFeature } from "./enums/AuditoriumFeature.enum.js";
 import { Seat } from "./Seat.js";
