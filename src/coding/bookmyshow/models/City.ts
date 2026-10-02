@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, OneToMany } from "typeorm";
+import { Column, Entity, OneToMany } from "typeorm";
 import { BaseModel } from "./BaseModel.js";
 import { Theatre } from "./Theatre.js";
 

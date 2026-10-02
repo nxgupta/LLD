@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToOne, OneToMany } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import type { Relation } from "typeorm"
 import { BaseModel } from "./BaseModel.js";
 import { AuditoriumFeature } from "./enums/AuditoriumFeature.enum.js";
@@ -21,7 +21,7 @@ export class Auditorium extends BaseModel {
     private _auditoriumFeatures: AuditoriumFeature[];
 
     @ManyToOne(() => Theatre, (theatre: Theatre) => theatre.auditoriums, { onDelete: "CASCADE" })
-    @JoinTable({ name: "theatre_id" })
+    @JoinColumn({ name: "theatre_id" })
     private _theatre: Theatre;
 
     @OneToMany(() => Show, (show) => show.auditorium)

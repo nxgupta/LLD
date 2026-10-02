@@ -1,3 +1,5 @@
+import type { User } from "../models/User.js";
+
 export class CreateUserResponseDto {
     private _user: User;
 
