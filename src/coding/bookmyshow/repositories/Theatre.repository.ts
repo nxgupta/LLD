@@ -11,4 +11,12 @@ export class TheatreRepository implements ITheatreRepository {
             throw new Error("Failed to save theatre", { cause: error });
         }
     }
+
+    async findById(theatreId: number): Promise<Theatre | null> {
+        try {
+            return await this.repo.findOne({ where: { id: theatreId } })
+        } catch (error) {
+            throw new Error("Failed to get Theatre", { cause: error })
+        }
+    }
 }

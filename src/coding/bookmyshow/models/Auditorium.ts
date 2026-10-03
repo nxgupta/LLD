@@ -47,10 +47,10 @@ export class Auditorium extends BaseModel {
         this._capacity = val;
     }
 
-    public get auditoriumFeatures(): AuditoriumFeature[] {
+    public get features(): AuditoriumFeature[] {
         return this._auditoriumFeatures;
     }
-    public set auditoriumFeatures(val: AuditoriumFeature[]) {
+    public set features(val: AuditoriumFeature[]) {
         this._auditoriumFeatures = val;
     }
 
