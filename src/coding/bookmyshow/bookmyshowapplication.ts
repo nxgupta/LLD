@@ -42,17 +42,26 @@ ObjectRegistry.register('ShowController', new ShowController(ObjectRegistry.get<
 class Client {
     async start() {
         await AppDataSource.initialize();
+        //User creation
         // const createUserRequestDto = new CreateUserRequestDto();
         // createUserRequestDto.email = "neer4@gmail.com";
         // const userController = ObjectRegistry.get<UserController>('UserController')
         // const user = await userController.createUser(createUserRequestDto);
         // console.log(user);
+
+        //theatre creation
         // await ObjectRegistry.get<CityController>('CityController').addCity('Delhi')
         // const theatre = await ObjectRegistry.get<TheatreController>('TheatreController').createTheatre('PVR', 'abc road Delhi', 2)
         // console.log(theatre);
+
+        //auditorium creation
         // const audiController = ObjectRegistry.get<AuditoriumController>('AuditoriumController')
         // const audiResponse = await audiController.createAuditorium('Audi 1', 1, 50);
         // console.log(audiResponse)
+
+        //movie creation
+
+        //show creation
         const startTime = new Date();
         const endDate = new Date(startTime.getTime() + 3 * 60 * 60 * 1000);
         const showController = ObjectRegistry.get<ShowController>('ShowController');
