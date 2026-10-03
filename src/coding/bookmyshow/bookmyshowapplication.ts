@@ -33,8 +33,8 @@ class Client {
         // const user = await userController.createUser(createUserRequestDto);
         // console.log(user);
         // await ObjectRegistry.get<CityController>('CityController').addCity('Delhi')
-        const theatre = await ObjectRegistry.get<TheatreController>('TheatreController').createTheatre('PVR', 'abc road Delhi', 2)
-        console.log(theatre);
+        // const theatre = await ObjectRegistry.get<TheatreController>('TheatreController').createTheatre('PVR', 'abc road Delhi', 2)
+        // console.log(theatre);
     }
 }
 

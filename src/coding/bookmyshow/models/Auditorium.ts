@@ -33,8 +33,6 @@ export class Auditorium extends BaseModel {
     public set name(val: string) {
         this._name = val;
     }
-
-    // This public getter satisfies (auditorium: Auditorium) => auditorium.seats without 'any'
     public get seats(): Seat[] {
         return this._seats;
     }

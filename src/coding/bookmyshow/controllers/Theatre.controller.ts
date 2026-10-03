@@ -1,14 +1,18 @@
-import type { Theatre } from "../models/Theatre.js";
+import { CreateTheatreResponseDto } from "../dtos/CreateTheatreResponse.dto.js";
 import type { TheatreService } from "../services/Theatre.service.js";
 
 export class TheatreController {
     constructor(private theatreService: TheatreService) { }
-    async createTheatre(name: string, address: string, cityId: number): Promise<Theatre> {
+    async createTheatre(name: string, address: string, cityId: number): Promise<CreateTheatreResponseDto> {
+        const response = new CreateTheatreResponseDto();
         try {
-            return await this.theatreService.createTheatre(name, address, cityId);
+            let theatre = await this.theatreService.createTheatre(name, address, cityId);
+            response.status = "SUCCESS"
+            response.theatre = theatre;
         } catch (error) {
-            console.error("TheatreController.createTheatre failed:", error);
-            throw error;
+            response.status = "FAILURE";
+            response.errorMessage = error instanceof Error ? error.message : String(error);
         }
+        return response;
     }
 }
