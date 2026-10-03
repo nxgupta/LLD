@@ -4,6 +4,11 @@ import type { CityService } from "../services/City.service.js";
 export class CityController {
     constructor(private cityService: CityService) { }
     async addCity(name: string): Promise<City> {
-        return this.cityService.addCity(name);
+        try {
+            return await this.cityService.addCity(name);
+        } catch (error) {
+            console.error("CityController.addCity failed:", error);
+            throw error;
+        }
     }
 }

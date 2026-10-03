@@ -8,6 +8,9 @@ import { UserService } from "./services/User.service.js";
 import { CityRepository } from "./repositories/City.repository.js";
 import { CityService } from "./services/City.service.js";
 import { CityController } from "./controllers/City.controller.js";
+import { TheatreRepository } from './repositories/Theatre.repository.js';
+import { TheatreService } from './services/Theatre.service.js';
+import { TheatreController } from './controllers/Theatre.controller.js';
 
 
 ObjectRegistry.register('UserRepository', new UserRepository())
@@ -17,15 +20,21 @@ ObjectRegistry.register('UserController', new UserController(ObjectRegistry.get<
 ObjectRegistry.register('CityRepository', new CityRepository());
 ObjectRegistry.register('CityService', new CityService(ObjectRegistry.get<CityRepository>('CityRepository')));
 ObjectRegistry.register('CityController', new CityController(ObjectRegistry.get<CityService>('CityService')));
+
+ObjectRegistry.register('TheatreRepository', new TheatreRepository())
+ObjectRegistry.register('TheatreService', new TheatreService(ObjectRegistry.get<TheatreRepository>('TheatreRepository'), ObjectRegistry.get<CityRepository>('CityRepository')))
+ObjectRegistry.register('TheatreController', new TheatreController(ObjectRegistry.get<TheatreService>('TheatreService')))
 class Client {
     async start() {
         await AppDataSource.initialize();
         // const createUserRequestDto = new CreateUserRequestDto();
-        // createUserRequestDto.email = "neer3@gmail.com";
+        // createUserRequestDto.email = "neer4@gmail.com";
         // const userController = ObjectRegistry.get<UserController>('UserController')
         // const user = await userController.createUser(createUserRequestDto);
         // console.log(user);
-        // await ObjectRegistry.get<CityController>('CityController').addCity('Chandigarh')
+        // await ObjectRegistry.get<CityController>('CityController').addCity('Delhi')
+        const theatre = await ObjectRegistry.get<TheatreController>('TheatreController').createTheatre('PVR', 'abc road Delhi', 2)
+        console.log(theatre);
     }
 }
 

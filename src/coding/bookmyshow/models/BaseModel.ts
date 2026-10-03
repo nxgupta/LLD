@@ -2,13 +2,13 @@ import { PrimaryGeneratedColumn } from "typeorm";
 
 export class BaseModel {
     @PrimaryGeneratedColumn("increment")
-    private id: string;
+    public id: number;
 
-    public getId(): string {
+    public getId(): number {
         return this.id;
     }
 
-    public setId(id: string): void {
+    public setId(id: number): void {
         this.id = id;
     }
 }
