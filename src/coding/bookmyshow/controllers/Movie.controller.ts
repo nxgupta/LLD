@@ -1,4 +1,3 @@
-import type { promises } from "node:dns";
 import type { MovieService } from "../services/Movie.service.js";
 import { AddMovieResponseDto } from "../dtos/AddMovieResponse.dto.js";
 

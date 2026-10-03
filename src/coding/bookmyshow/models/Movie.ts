@@ -18,7 +18,7 @@ export class Movie extends BaseModel {
 
     @Column({ name: "length", type: "int" })
     private _length: number;
-    @Column({ name: "rating", type: "int" })
+    @Column({ name: "rating", type: "float" })
     private _rating: number;
 
     @Column({ name: "movie_features", type: "enum", enum: MovieFeature, array: true, default: [] })

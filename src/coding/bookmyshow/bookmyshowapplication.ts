@@ -16,7 +16,9 @@ import { AuditoriumService } from './services/AuditoriumService.js';
 import { AuditoriumController } from './controllers/Auditorium.controller.js';
 import { ShowRepository } from './repositories/Show.repository.js';
 import { ShowService } from './services/Show.service.js';
-import type { MovieRepository } from './repositories/Movie.repository.js';
+import { MovieRepository } from './repositories/Movie.repository.js';
+import { MovieService } from './services/Movie.service.js';
+import { MovieController } from './controllers/Movie.controller.js';
 import { ShowController } from './controllers/Show.controller.js';
 
 
@@ -35,6 +37,10 @@ ObjectRegistry.register('TheatreController', new TheatreController(ObjectRegistr
 ObjectRegistry.register('AuditoriumRepository', new AuditoriumRepository());
 ObjectRegistry.register('AuditoriumService', new AuditoriumService(ObjectRegistry.get<AuditoriumRepository>('AuditoriumRepository'), ObjectRegistry.get<TheatreRepository>('TheatreRepository')));
 ObjectRegistry.register('AuditoriumController', new AuditoriumController(ObjectRegistry.get<AuditoriumService>('AuditoriumService')));
+
+ObjectRegistry.register('MovieRepository', new MovieRepository());
+ObjectRegistry.register('MovieService', new MovieService(ObjectRegistry.get<MovieRepository>('MovieRepository')));
+ObjectRegistry.register('MovieController', new MovieController(ObjectRegistry.get<MovieService>('MovieService')));
 
 ObjectRegistry.register('ShowRepository', new ShowRepository());
 ObjectRegistry.register('ShowService', new ShowService(ObjectRegistry.get<ShowRepository>('ShowRepository'), ObjectRegistry.get<MovieRepository>('MovieRepository'), ObjectRegistry.get<AuditoriumRepository>('AuditoriumRepository')));
@@ -60,6 +66,9 @@ class Client {
         // console.log(audiResponse)
 
         //movie creation
+        const movieController = ObjectRegistry.get<MovieController>('MovieController');
+        const movieResponse = await movieController.addMovie('Inception', 148, 4.5);
+        console.log(movieResponse);
 
         //show creation
         const startTime = new Date();

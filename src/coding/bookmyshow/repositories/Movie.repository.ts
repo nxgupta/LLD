@@ -1,4 +1,3 @@
-import { appendFile } from "node:fs";
 import { Movie } from "../models/Movie.js";
 import type { IMovieRepository } from "./interfaces/IMovieRepository.js";
 import { AppDataSource } from "../data-source.js";
