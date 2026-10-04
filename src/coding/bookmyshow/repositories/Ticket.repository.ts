@@ -5,10 +5,20 @@ import { AppDataSource } from "../data-source.js";
 
 export class TicketRepository implements ITicketRepository {
     private repo = AppDataSource.getRepository(Ticket);
-    save(ticket: Ticket, entityManager?: EntityManager): Promise<Ticket> {
-        //return thsi
+    async save(ticket: Ticket, entityManager: EntityManager): Promise<Ticket> {
+        return await entityManager.getRepository(Ticket).save(ticket)
     }
-    findById(id: number): Promise<Ticket | null> {
-
+    async findById(id: number): Promise<Ticket | null> {
+        return await this.repo.findOne({
+            where: {
+                id
+            },
+            relations: {
+                _show: true,
+                _seat: true,
+                _bookedBy: true,
+                _auditorium: true
+            } as any
+        })
     }
 }   

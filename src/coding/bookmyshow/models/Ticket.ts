@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, ManyToOne, OneToMany } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 import { Auditorium } from "./Auditorium.js";
 import { TicketStatus } from "./enums/TicketStatus.enum.js";
 import { Show } from "./Show.js";
@@ -12,6 +12,7 @@ export class Ticket extends BaseModel {
     @ManyToOne(() => Show)
     private _show: Show;
     @ManyToMany(() => ShowSeat)
+    @JoinTable()
     private _showSeats: ShowSeat[];
     @ManyToOne(() => Auditorium)
     private _auditorium: Auditorium;

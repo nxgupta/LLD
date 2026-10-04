@@ -18,4 +18,5 @@ export class ShowRepository implements IShowRepository {
             throw new Error("Failed to fetch show", { cause: error });
         }
     }
+
 }

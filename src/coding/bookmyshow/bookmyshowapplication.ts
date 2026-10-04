@@ -24,6 +24,10 @@ import { SeatRepository } from './repositories/Seat.repository.js';
 import { ShowSeatRepository } from './repositories/ShowSeat.repository.js';
 import { SeatService } from './services/Seat.service.js';
 import { ShowSeatService } from './services/ShowSeat.service.js';
+import { TicketRepository } from './repositories/Ticket.repository.js';
+import { TicketService } from './services/Ticket.service.js';
+import { TicketController } from './controllers/Ticket.controller.js';
+import { BookTicketRequestDto } from './dtos/BookTicketRequest.dto.js';
 
 
 ObjectRegistry.register('UserRepository', new UserRepository())
@@ -50,11 +54,10 @@ ObjectRegistry.register('ShowRepository', new ShowRepository());
 ObjectRegistry.register('ShowService', new ShowService(ObjectRegistry.get<ShowRepository>('ShowRepository'), ObjectRegistry.get<MovieRepository>('MovieRepository'), ObjectRegistry.get<AuditoriumRepository>('AuditoriumRepository')));
 ObjectRegistry.register('ShowController', new ShowController(ObjectRegistry.get<ShowService>('ShowService')));
 
-// Register Repositories
+// --- Seat & ShowSeat Modules ---
 ObjectRegistry.register('SeatRepository', new SeatRepository());
 ObjectRegistry.register('ShowSeatRepository', new ShowSeatRepository());
 
-// Register Services
 ObjectRegistry.register('SeatService', new SeatService(
     ObjectRegistry.get<SeatRepository>('SeatRepository'),
     ObjectRegistry.get<AuditoriumRepository>('AuditoriumRepository')
@@ -65,6 +68,18 @@ ObjectRegistry.register('ShowSeatService', new ShowSeatService(
     ObjectRegistry.get<ShowRepository>('ShowRepository'),
     ObjectRegistry.get<SeatRepository>('SeatRepository')
 ));
+
+// --- Ticket Module ---
+ObjectRegistry.register('TicketRepository', new TicketRepository());
+ObjectRegistry.register('TicketService', new TicketService(
+    ObjectRegistry.get<TicketRepository>('TicketRepository'),
+    ObjectRegistry.get<ShowSeatRepository>('ShowSeatRepository'),
+    ObjectRegistry.get<UserRepository>('UserRepository')
+));
+ObjectRegistry.register('TicketController', new TicketController(
+    ObjectRegistry.get<TicketService>('TicketService')
+));
+
 
 class Client {
     async start() {
@@ -105,9 +120,22 @@ class Client {
         // console.log(`Created ${physicalSeats.length} physical seats.`);
 
         // 2. Generate ShowSeats for Show 1 (id: 1)
-        const showSeatService = ObjectRegistry.get<ShowSeatService>('ShowSeatService');
-        const showSeats = await showSeatService.createShowSeatsForShow(1);
-        console.log(`Generated ${showSeats.length} ShowSeats in AVAILABLE state for Show 1:`, showSeats);
+        // const showSeatService = ObjectRegistry.get<ShowSeatService>('ShowSeatService');
+        // const showSeats = await showSeatService.createShowSeatsForShow(1);
+        // console.log(`Generated ${showSeats.length} ShowSeats in AVAILABLE state for Show 1:`, showSeats);
+
+        const ticketController = ObjectRegistry.get<TicketController>('TicketController');
+        const ticketRequest = new BookTicketRequestDto();
+        ticketRequest.userId = 1;
+        ticketRequest.seatIds = [1, 2]
+        const bookingResponse = await ticketController.bookTicket(ticketRequest);
+
+        console.log("Booking Response Status:", bookingResponse.status);
+        if (bookingResponse.status === "SUCCESS") {
+            console.log("Ticket Booked Successfully! Ticket ID:", bookingResponse.ticket?.id);
+        } else {
+            console.log("Booking Failed with Error:", bookingResponse.errorMessage);
+        }
     }
 }
 
