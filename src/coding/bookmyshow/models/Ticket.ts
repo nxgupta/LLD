@@ -12,7 +12,7 @@ export class Ticket extends BaseModel {
     @ManyToOne(() => Show)
     private _show: Show;
     @ManyToMany(() => ShowSeat)
-    @JoinTable()
+    @JoinTable({ name: "ticket_show_seats" })
     private _showSeats: ShowSeat[];
     @ManyToOne(() => Auditorium)
     private _auditorium: Auditorium;

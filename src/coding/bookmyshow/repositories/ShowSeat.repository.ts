@@ -8,7 +8,7 @@ export class ShowSeatRepository implements IShowSeatRepository {
 
     async saveMany(showSeats: ShowSeat[], entityManager?: EntityManager): Promise<ShowSeat[]> {
         const repository = entityManager ? entityManager.getRepository(ShowSeat) : this.repo;
-        return await this.repo.save(showSeats);
+        return await repository.save(showSeats);
 
     }
 
