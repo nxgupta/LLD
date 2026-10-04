@@ -20,32 +20,35 @@ export class PaymentService {
         amount: number,
         method: PaymentMethod = PaymentMethod.UPI
     ): Promise<Payment> {
-        return await AppDataSource.transaction(async (entityManager) => {
-            // 1. Fetch ticket inside transaction
-            const ticket = await this.ticketRepository.findById(ticketId, entityManager);
-            if (!ticket) {
-                throw new Error(`Ticket with id ${ticketId} not found`);
-            }
+        // 1. Fetch ticket and validate
+        const ticket = await this.ticketRepository.findById(ticketId);
+        if (!ticket) {
+            throw new Error(`Ticket with id ${ticketId} not found`);
+        }
 
-            // 2. Validate ticket is in PENDING state
-            if (ticket.ticketStatus !== TicketStatus.PENDING) {
-                throw new Error(`Cannot pay for ticket with status: ${TicketStatus[ticket.ticketStatus]}`);
-            }
+        if (ticket.ticketStatus !== TicketStatus.PENDING) {
+            throw new Error(`Cannot pay for ticket with status: ${TicketStatus[ticket.ticketStatus]}`);
+        }
 
-            // 3. Validate that 10 minutes have NOT elapsed
-            const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
-            if (ticket.timeOfBooking < tenMinutesAgo) {
-                // Auto-expire right here if user tried to pay after 10 min
+        // 2. Check 10-minute hold window
+        const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+        if (ticket.timeOfBooking < tenMinutesAgo) {
+            // Commit the cancellation and seat release in its own transaction!
+            await AppDataSource.transaction(async (entityManager) => {
                 ticket.ticketStatus = TicketStatus.CANCELLED;
                 for (const seat of ticket.showSeats) {
                     seat.state = ShowSeatState.AVAILABLE;
                 }
                 await this.ticketRepository.save(ticket, entityManager);
                 await this.showSeatRepository.saveMany(ticket.showSeats, entityManager);
-                throw new Error("Payment window expired! Ticket has been cancelled and seats released.");
-            }
+            });
 
-            // 4. Create successful Payment record
+            // Now that the DB has committed the release, throw the expiry error:
+            throw new Error("Payment window expired! Ticket has been cancelled and seats released.");
+        }
+
+        // 3. Payment succeeded: Commit payment, confirm ticket, mark seats BOOKED
+        return await AppDataSource.transaction(async (entityManager) => {
             const payment = new Payment();
             payment.ticket = ticket;
             payment.amount = amount;
@@ -56,11 +59,9 @@ export class PaymentService {
 
             const savedPayment = await this.paymentRepository.save(payment, entityManager);
 
-            // 5. Update Ticket to SUCCESS
             ticket.ticketStatus = TicketStatus.SUCCESS;
             await this.ticketRepository.save(ticket, entityManager);
 
-            // 6. Permanently lock seats to BOOKED
             for (const showSeat of ticket.showSeats) {
                 showSeat.state = ShowSeatState.BOOKED;
             }
