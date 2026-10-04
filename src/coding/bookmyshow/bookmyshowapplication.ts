@@ -20,6 +20,10 @@ import { MovieRepository } from './repositories/Movie.repository.js';
 import { MovieService } from './services/Movie.service.js';
 import { MovieController } from './controllers/Movie.controller.js';
 import { ShowController } from './controllers/Show.controller.js';
+import { SeatRepository } from './repositories/Seat.repository.js';
+import { ShowSeatRepository } from './repositories/ShowSeat.repository.js';
+import { SeatService } from './services/Seat.service.js';
+import { ShowSeatService } from './services/ShowSeat.service.js';
 
 
 ObjectRegistry.register('UserRepository', new UserRepository())
@@ -45,6 +49,23 @@ ObjectRegistry.register('MovieController', new MovieController(ObjectRegistry.ge
 ObjectRegistry.register('ShowRepository', new ShowRepository());
 ObjectRegistry.register('ShowService', new ShowService(ObjectRegistry.get<ShowRepository>('ShowRepository'), ObjectRegistry.get<MovieRepository>('MovieRepository'), ObjectRegistry.get<AuditoriumRepository>('AuditoriumRepository')));
 ObjectRegistry.register('ShowController', new ShowController(ObjectRegistry.get<ShowService>('ShowService')));
+
+// Register Repositories
+ObjectRegistry.register('SeatRepository', new SeatRepository());
+ObjectRegistry.register('ShowSeatRepository', new ShowSeatRepository());
+
+// Register Services
+ObjectRegistry.register('SeatService', new SeatService(
+    ObjectRegistry.get<SeatRepository>('SeatRepository'),
+    ObjectRegistry.get<AuditoriumRepository>('AuditoriumRepository')
+));
+
+ObjectRegistry.register('ShowSeatService', new ShowSeatService(
+    ObjectRegistry.get<ShowSeatRepository>('ShowSeatRepository'),
+    ObjectRegistry.get<ShowRepository>('ShowRepository'),
+    ObjectRegistry.get<SeatRepository>('SeatRepository')
+));
+
 class Client {
     async start() {
         await AppDataSource.initialize();
@@ -66,16 +87,27 @@ class Client {
         // console.log(audiResponse)
 
         //movie creation
-        const movieController = ObjectRegistry.get<MovieController>('MovieController');
-        const movieResponse = await movieController.addMovie('Inception', 148, 4.5);
-        console.log(movieResponse);
+        // const movieController = ObjectRegistry.get<MovieController>('MovieController');
+        // const movieResponse = await movieController.addMovie('Inception', 148, 4.5);
+        // console.log(movieResponse);
 
         //show creation
-        const startTime = new Date();
-        const endDate = new Date(startTime.getTime() + 3 * 60 * 60 * 1000);
-        const showController = ObjectRegistry.get<ShowController>('ShowController');
-        const showResponse = await showController.createShow(1, 1, startTime, endDate)
-        console.log(showResponse)
+        // const startTime = new Date();
+        // const endDate = new Date(startTime.getTime() + 3 * 60 * 60 * 1000);
+        // const showController = ObjectRegistry.get<ShowController>('ShowController');
+        // const showResponse = await showController.createShow(1, 1, startTime, endDate)
+        // console.log(showResponse)
+
+
+        // 1. Add physical seats to Audi 1 (id: 1)
+        // const seatService = ObjectRegistry.get<SeatService>('SeatService');
+        // const physicalSeats = await seatService.createSeatsForAuditorium(1, ["A1", "A2", "A3", "B1", "B2", "B3"]);
+        // console.log(`Created ${physicalSeats.length} physical seats.`);
+
+        // 2. Generate ShowSeats for Show 1 (id: 1)
+        const showSeatService = ObjectRegistry.get<ShowSeatService>('ShowSeatService');
+        const showSeats = await showSeatService.createShowSeatsForShow(1);
+        console.log(`Generated ${showSeats.length} ShowSeats in AVAILABLE state for Show 1:`, showSeats);
     }
 }
 

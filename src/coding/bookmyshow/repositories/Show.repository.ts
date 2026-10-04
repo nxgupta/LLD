@@ -13,7 +13,7 @@ export class ShowRepository implements IShowRepository {
     }
     async findById(showId: number): Promise<Show | null> {
         try {
-            return await this.repo.findOne({ where: { id: showId } });
+            return await this.repo.findOne({ where: { id: showId }, relations: { _auditorium: true, _movie: true } as any });
         } catch (error) {
             throw new Error("Failed to fetch show", { cause: error });
         }
