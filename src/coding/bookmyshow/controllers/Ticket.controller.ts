@@ -18,4 +18,14 @@ export class TicketController {
         }
         return response;
     }
+
+    async cancelExpiredTickets(timeoutMinutes: number = 10): Promise<{ count: number; status: string }> {
+        try {
+            const count = await this.ticketService.expireUnpaidTickets(timeoutMinutes);
+            return { count, status: "SUCCESS" };
+        } catch (error) {
+            console.error("Cleanup failed:", error);
+            return { count: 0, status: "FAILURE" };
+        }
+    }
 }

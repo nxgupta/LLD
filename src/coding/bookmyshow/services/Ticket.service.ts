@@ -54,4 +54,29 @@ export class TicketService {
             return savedTicket;
         })
     }
+
+    async expireUnpaidTickets(timeoutMinutes: number = 10): Promise<number> {
+        const cutoffTime = new Date(Date.now() - timeoutMinutes * 60 * 1000);
+        const expiredTickets = await this.ticketRepository.findPendingTicketsOlderThan(cutoffTime);
+
+        if (expiredTickets.length === 0) {
+            return 0;
+        }
+
+        for (const ticket of expiredTickets) {
+            await AppDataSource.transaction(async (entityManager) => {
+                // 1. Mark ticket as CANCELLED
+                ticket.ticketStatus = TicketStatus.CANCELLED;
+                await this.ticketRepository.save(ticket, entityManager);
+
+                // 2. Release seats back to AVAILABLE
+                for (const showSeat of ticket.showSeats) {
+                    showSeat.state = ShowSeatState.AVAILABLE;
+                }
+                await this.showSeatRepository.saveMany(ticket.showSeats, entityManager);
+            });
+        }
+
+        return expiredTickets.length;
+    }
 }

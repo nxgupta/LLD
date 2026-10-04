@@ -28,6 +28,10 @@ import { TicketRepository } from './repositories/Ticket.repository.js';
 import { TicketService } from './services/Ticket.service.js';
 import { TicketController } from './controllers/Ticket.controller.js';
 import { BookTicketRequestDto } from './dtos/BookTicketRequest.dto.js';
+import { PaymentRepository } from './repositories/Payment.repository.js';
+import { PaymentService } from './services/Payment.service.js';
+import { PaymentController } from './controllers/Payment.controller.js';
+import { PaymentMethod } from './models/enums/PaymentMethod.enum.js';
 
 
 ObjectRegistry.register('UserRepository', new UserRepository())
@@ -80,6 +84,16 @@ ObjectRegistry.register('TicketController', new TicketController(
     ObjectRegistry.get<TicketService>('TicketService')
 ));
 
+ObjectRegistry.register('PaymentRepository', new PaymentRepository());
+ObjectRegistry.register('PaymentService', new PaymentService(
+    ObjectRegistry.get<PaymentRepository>('PaymentRepository'),
+    ObjectRegistry.get<TicketRepository>('TicketRepository'),
+    ObjectRegistry.get<ShowSeatRepository>('ShowSeatRepository')
+));
+ObjectRegistry.register('PaymentController', new PaymentController(
+    ObjectRegistry.get<PaymentService>('PaymentService')
+));
+
 
 class Client {
     async start() {
@@ -124,17 +138,28 @@ class Client {
         // const showSeats = await showSeatService.createShowSeatsForShow(1);
         // console.log(`Generated ${showSeats.length} ShowSeats in AVAILABLE state for Show 1:`, showSeats);
 
-        const ticketController = ObjectRegistry.get<TicketController>('TicketController');
-        const ticketRequest = new BookTicketRequestDto();
-        ticketRequest.userId = 1;
-        ticketRequest.seatIds = [1, 2]
-        const bookingResponse = await ticketController.bookTicket(ticketRequest);
+        // const ticketController = ObjectRegistry.get<TicketController>('TicketController');
+        // const ticketRequest = new BookTicketRequestDto();
+        // ticketRequest.userId = 1;
+        // ticketRequest.seatIds = [1, 2]
+        // const bookingResponse = await ticketController.bookTicket(ticketRequest);
 
-        console.log("Booking Response Status:", bookingResponse.status);
-        if (bookingResponse.status === "SUCCESS") {
-            console.log("Ticket Booked Successfully! Ticket ID:", bookingResponse.ticket?.id);
+        // console.log("Booking Response Status:", bookingResponse.status);
+        // if (bookingResponse.status === "SUCCESS") {
+        //     console.log("Ticket Booked Successfully! Ticket ID:", bookingResponse.ticket?.id);
+        // } else {
+        //     console.log("Booking Failed with Error:", bookingResponse.errorMessage);
+        // }
+
+
+        const paymentController = ObjectRegistry.get<PaymentController>('PaymentController');
+        const paymentResponse = await paymentController.makePayment(2, 500, PaymentMethod.UPI);
+
+        console.log("Payment Status:", paymentResponse.status);
+        if (paymentResponse.status === "SUCCESS") {
+            console.log("Transaction Reference ID:", paymentResponse.payment?.referenceId);
         } else {
-            console.log("Booking Failed with Error:", bookingResponse.errorMessage);
+            console.log("Reason:", paymentResponse.errorMessage);
         }
     }
 }

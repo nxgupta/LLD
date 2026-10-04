@@ -8,7 +8,7 @@ export const AppDataSource = new DataSource(
         username: "bookmyshow",
         password: "bookmyshow",
         database: "bookmyshow",
-        synchronize: false,
+        synchronize: true,
         entities: ["models/*.ts"]
     }
 )
